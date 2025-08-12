@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { FaPlay, FaCheck, FaTimes, FaRedo } from "react-icons/fa"; // Usiamo icone per un look più moderno
+import { FaPlay, FaCheck, FaTimes, FaRedo } from "react-icons/fa";
 
-// Assumiamo che Tailwind CSS sia disponibile nell'ambiente
 const QuizPage = () => {
   // ✅ Aggiunta di una chiave per forzare il re-fetch dei dati
   const [quizKey, setQuizKey] = useState(0);
@@ -31,7 +30,6 @@ const QuizPage = () => {
           throw new Error("Impossibile ottenere un ID del quiz casuale.");
         }
         const randomQuizId = await quizIdResponse.json();
-        console.log("ID quiz casuale ottenuto:", randomQuizId);
 
         // 2. Ottiene le domande per l'ID del quiz
         const questionsResponse = await fetch(
@@ -45,7 +43,6 @@ const QuizPage = () => {
         // ✅ Aggiunge un controllo per assicurarsi che ci siano domande
         if (quizQuestions && quizQuestions.length > 0) {
           setQuestions(quizQuestions);
-          console.log("Domande ottenute:", quizQuestions);
         } else {
           throw new Error("Il quiz non contiene domande. Riprova.");
         }
@@ -163,58 +160,45 @@ const QuizPage = () => {
       { key: "D", text: question.optionD },
     ];
 
+    // Helpers definiti QUI così leggono `question` e `selectedAnswer`
     const getAnswerButtonClass = (optionKey) => {
-      // Stile base per tutti i pulsanti
-      let buttonClass =
-        "w-full text-left p-4 rounded-xl transition duration-300 ease-in-out shadow-md font-semibold ";
-
-      // Stili specifici se una risposta è stata selezionata
+      let cls = "w-100 text-start p-3 fw-semibold mb-3 btn ";
       if (selectedAnswer !== null) {
-        if (optionKey === question.correct) {
-          // Risposta corretta
-          buttonClass += "bg-green-500 text-white scale-105 animate-pulse ";
-        } else if (optionKey === selectedAnswer) {
-          // Risposta sbagliata
-          buttonClass += "bg-red-500 text-white scale-95 ";
-        } else {
-          // Altre opzioni non selezionate
-          buttonClass +=
-            "bg-gray-200 text-gray-600 cursor-not-allowed opacity-50 ";
-        }
+        if (optionKey === question.correct) cls += "btn-success";
+        else if (optionKey === selectedAnswer) cls += "btn-danger";
+        else cls += "btn-secondary disabled";
       } else {
-        // Nessuna risposta selezionata
-        buttonClass +=
-          "bg-white text-gray-800 hover:bg-blue-100 hover:text-blue-700 ";
+        cls += "btn-outline-primary";
       }
-      return buttonClass;
+      return cls;
     };
 
     const getIcon = (optionKey) => {
       if (selectedAnswer !== null) {
-        if (optionKey === question.correct) {
-          return <FaCheck className="ml-auto text-white text-xl" />;
-        } else if (optionKey === selectedAnswer) {
-          return <FaTimes className="ml-auto text-white text-xl" />;
-        }
+        if (optionKey === question.correct)
+          return <FaCheck className="ms-auto text-white fs-5" />;
+        if (optionKey === selectedAnswer)
+          return <FaTimes className="ms-auto text-white fs-5" />;
       }
       return null;
     };
 
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-100 p-8">
-        <div className="bg-white rounded-3xl shadow-2xl p-10 w-full max-w-3xl transform transition-all duration-500 hover:scale-105">
-          <div className="flex justify-between items-center mb-6 text-gray-500 text-lg font-medium">
+      <div className="d-flex align-items-center justify-content-center min-vh-100 bg-light p-4">
+        <div
+          className="bg-white rounded-4 shadow p-4 w-100"
+          style={{ maxWidth: 840 }}
+        >
+          <div className="d-flex justify-content-between text-secondary mb-3">
             <span>
               Domanda {currentQuestionIndex + 1} di {questions.length}
             </span>
             <span>Punti: {score}</span>
           </div>
 
-          <h2 className="text-3xl md:text-4xl font-extrabold text-center text-gray-900 mb-8 leading-tight">
-            {question.text}
-          </h2>
+          <h2 className="h3 text-center fw-bold mb-4">{question.text}</h2>
 
-          <div className="space-y-4">
+          <div>
             {options.map((option) => (
               <button
                 key={option.key}
@@ -222,8 +206,8 @@ const QuizPage = () => {
                 className={getAnswerButtonClass(option.key)}
                 disabled={selectedAnswer !== null}
               >
-                <div className="flex items-center">
-                  <span className="bg-gray-300 text-gray-800 rounded-full px-3 py-1 mr-3 font-bold text-lg">
+                <div className="d-flex align-items-center">
+                  <span className="badge bg-secondary me-3 fs-6">
                     {option.key}
                   </span>
                   <span>{option.text}</span>
@@ -237,7 +221,7 @@ const QuizPage = () => {
     );
   };
 
-  // Rendering principale basato sullo stato
+  // RENDER principale
   if (loading) return renderLoading();
   if (error) return renderError();
   if (showResults) return renderResults();
