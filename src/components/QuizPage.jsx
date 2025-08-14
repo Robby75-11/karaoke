@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { FaPlay, FaCheck, FaTimes, FaRedo } from "react-icons/fa";
-
+import api from "../api/api";
 const QuizPage = () => {
   // ✅ Aggiunta di una chiave per forzare il re-fetch dei dati
   const [quizKey, setQuizKey] = useState(0);
@@ -22,23 +22,13 @@ const QuizPage = () => {
       setShowResults(false);
 
       try {
-        // 1. Ottiene un ID del quiz casuale
-        const quizIdResponse = await fetch(
-          "http://localhost:8080/api/quiz/random"
-        );
-        if (!quizIdResponse.ok) {
-          throw new Error("Impossibile ottenere un ID del quiz casuale.");
-        }
-        const randomQuizId = await quizIdResponse.json();
+        const quizIdResponse = await api.get("/api/quiz/random");
+        const randomQuizId = quizIdResponse.data;
 
-        // 2. Ottiene le domande per l'ID del quiz
-        const questionsResponse = await fetch(
-          `http://localhost:8080/api/quiz/${randomQuizId}/questions`
+        const questionsResponse = await api.get(
+          `/api/quiz/${randomQuizId}/questions`
         );
-        if (!questionsResponse.ok) {
-          throw new Error("Impossibile ottenere le domande del quiz.");
-        }
-        const quizQuestions = await questionsResponse.json();
+        const quizQuestions = questionsResponse.data;
 
         // ✅ Aggiunge un controllo per assicurarsi che ci siano domande
         if (quizQuestions && quizQuestions.length > 0) {
