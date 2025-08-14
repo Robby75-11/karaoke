@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Container, Form, Button, Alert, Row, Col } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import api from "../api";
+import api from "..api/api";
 // Stili CSS personalizzati per la form
 const formStyles = `
   .custom-form-container {
