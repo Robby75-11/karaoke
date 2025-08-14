@@ -55,7 +55,6 @@ function Login() {
       }
 
       const token = await response.text();
-      console.log("Login riuscito! Token:", token);
 
       const userData = { username: username, token: token };
       login(userData);

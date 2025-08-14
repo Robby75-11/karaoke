@@ -62,6 +62,13 @@ function MyNavBar() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
 
+  const displayName =
+    user?.name ||
+    user?.fullName ||
+    user?.username ||
+    user?.nome ||
+    (user?.email ? user.email.split("@")[0] : null);
+
   const handleLogout = () => {
     logout();
     navigate("/");
@@ -104,13 +111,18 @@ function MyNavBar() {
             </Form>
             <Nav className="my-navbar-nav-group">
               {user ? (
-                <Button
-                  variant="outline-danger"
-                  onClick={handleLogout}
-                  className="my-navbar-btn"
-                >
-                  Logout
-                </Button>
+                <>
+                  <Navbar.Text className="me-2 fw-semibold">
+                    {displayName ? `Ciao, ${displayName}` : "Ciao!"}
+                  </Navbar.Text>
+                  <Button
+                    variant="outline-danger"
+                    onClick={handleLogout}
+                    className="my-navbar-btn"
+                  >
+                    Logout
+                  </Button>
+                </>
               ) : (
                 <>
                   <Button

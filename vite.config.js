@@ -6,13 +6,12 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      // Proxy per le richieste API di Deezer
+      // Backend Spring
       "/api": {
-        target: "https://api.deezer.com",
+        target: "http://localhost:8080",
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, ""),
+        // niente rewrite se il backend espone già /api/...
       },
-      // ✅ Rimosso: il proxy di Gemini non è necessario.
     },
   },
 });
