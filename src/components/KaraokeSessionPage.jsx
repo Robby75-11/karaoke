@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import { fetchLyricsBySong } from "../api.js";
+import { fetchLyricsBySong } from "../api/musicService.js";
 import { Container, Card, Spinner, Alert } from "react-bootstrap";
 
 const KaraokeSessionPage = () => {

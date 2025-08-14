@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { fetchDeezer } from "../api.js";
+import { fetchDeezer } from "../api/musicService.js";
 import { useNavigate } from "react-router-dom";
 import {
   Container,
