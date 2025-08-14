@@ -4,9 +4,7 @@ import React, { createContext, useContext, useState } from "react";
 const AuthContext = createContext(null);
 
 // Un hook personalizzato per usare il contesto
-export const useAuth = () => {
-  return useContext(AuthContext);
-};
+export const useAuth = () => useContext(AuthContext);
 
 // Il provider che avvolge l'intera applicazione
 export const AuthProvider = ({ children }) => {
@@ -28,12 +26,9 @@ export const AuthProvider = ({ children }) => {
   };
 
   // Il valore del contesto che verrà fornito ai componenti
-  const value = {
-    user,
-    login,
-    logout,
-    isLoggedIn: !!user,
-  };
-
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={{ user, login, logout, isLoggedIn: !!user }}>
+      {children}
+    </AuthContext.Provider>
+  );
 };

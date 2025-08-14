@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Container, Form, Button, Alert, Row, Col } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-
+import api from "../api";
 // Stili CSS personalizzati per la form
 const formStyles = `
   .custom-form-container {
@@ -36,28 +36,17 @@ function Register() {
     setSuccess(false);
 
     try {
-      const response = await fetch("http://localhost:8080/auth/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ username, password }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(
-          errorData.message || "Errore durante la registrazione."
-        );
-      }
-
+      await api.post("/auth/register", { username, password }); // 🔹 usa baseURL e axios
       setSuccess(true);
-      setTimeout(() => {
-        navigate("/login");
-      }, 2000);
+      setTimeout(() => navigate("/login"), 2000);
     } catch (err) {
-      console.error("Errore di registrazione:", err.message);
-      setError(err.message);
+      console.error(
+        "Errore di registrazione:",
+        err.response?.data || err.message
+      );
+      setError(
+        err.response?.data?.message || "Errore durante la registrazione."
+      );
     }
   };
 

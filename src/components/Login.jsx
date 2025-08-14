@@ -7,6 +7,7 @@ import Col from "react-bootstrap/Col";
 import Alert from "react-bootstrap/Alert";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import api from "../api";
 
 // Stili CSS personalizzati per la form
 const formStyles = `
@@ -41,27 +42,20 @@ function Login() {
     setError(null);
 
     try {
-      const response = await fetch("http://localhost:8080/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ username, password }),
-      });
+      const response = await api.post("/auth/login", { username, password });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Credenziali non valide");
-      }
+      // Il backend restituisce un token in testo semplice
+      const token =
+        typeof response.data === "string" ? response.data : response.data.token;
 
-      const token = await response.text();
-
-      const userData = { username: username, token: token };
-      login(userData);
+      login({ username, token });
       navigate("/");
     } catch (err) {
-      console.error("Errore durante il login:", err.message);
-      setError(err.message);
+      console.error(
+        "Errore durante il login:",
+        err.response?.data || err.message
+      );
+      setError(err.response?.data?.message || "Credenziali non valide");
     }
   };
 

@@ -1,8 +1,15 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL, // es: https://thoughtless-aigneis-capstone2025-5da74a8a.koyeb.app
-  withCredentials: true, // solo true se usi cookie/sessioni
+  baseURL: import.meta.env.VITE_API_BASE_URL,
+});
+
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem("token"); // o come lo chiami nel tuo storage
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
 });
 
 export default api;
