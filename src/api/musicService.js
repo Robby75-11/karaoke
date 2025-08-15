@@ -1,18 +1,17 @@
-import api from "./api";
+import api from "./api.js";
 
-export const fetchDeezer = async (query) => {
-  const res = await api.get(`/api/deezer/search`, {
+export const fetchDeezer = async (artist = "", title = "") => {
+  let query = "";
+  if (artist && title) {
+    query = `artist:"${artist}" track:"${title}"`;
+  } else {
+    query = artist || title;
+  }
+
+  const response = await api.get("/api/deezer/search", {
     params: { q: query },
   });
 
-  return res.data;
-};
-
-export const fetchLyricsBySong = async (track) => {
-  const res = await api.post(`/api/lyrics/bySong`, {
-    deezerId: track.id,
-    titolo: track.title,
-    artista: track.artist.name,
-  });
-  return res.data;
+  // Deezer risponde con { data: [ brani ] }
+  return response.data;
 };
