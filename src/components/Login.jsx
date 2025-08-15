@@ -47,6 +47,7 @@ function Login() {
       // Il backend restituisce un token in testo semplice
       const token =
         typeof response.data === "string" ? response.data : response.data.token;
+      localStorage.setItem("token", token);
 
       login({ username, token });
       navigate("/");

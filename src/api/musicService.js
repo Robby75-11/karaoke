@@ -1,9 +1,10 @@
 import api from "./api";
 
 export const fetchDeezer = async (query) => {
-  const res = await api.get(
-    `/api/deezer/search?q=${encodeURIComponent(query)}`
-  );
+  const res = await api.get(`/api/deezer/search`, {
+    params: { q: query },
+  });
+
   return res.data;
 };
 
