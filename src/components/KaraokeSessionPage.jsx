@@ -20,7 +20,11 @@ const KaraokeSessionPage = () => {
       }
       try {
         setLoading(true);
-        const data = await fetchLyricsBySong(trackData);
+        const data = await fetchLyricsBySong(
+          trackData.id,
+          trackData.title,
+          trackData.artist?.name
+        );
         setLyrics(data);
       } catch (err) {
         console.error("Errore nel recupero dei testi:", err);
