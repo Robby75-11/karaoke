@@ -42,6 +42,3 @@ export const fetchSongById = async (id) => {
   const res = await api.get(`/api/songs/${id}`);
   return res.data;
 };
-
-// ✅ Esportiamo tutto
-export { fetchDeezer, fetchLyricsBySong, fetchAllSongs, fetchSongById };
