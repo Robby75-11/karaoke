@@ -1,16 +1,20 @@
+// src/api/api.js
 import axios from "axios";
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+const api = axios.create({
+  baseURL: import.meta.env.VITE_API_BASE_URL,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
 
-// 🔍 Ricerca brani tramite il tuo backend
-export const searchTracks = async (query) => {
-  try {
-    const res = await axios.get(`${API_BASE_URL}/api/deezer/search`, {
-      params: { q: query },
-    });
-    return res.data;
-  } catch (err) {
-    console.error("Errore ricerca Deezer:", err);
-    throw err;
+// Interceptor per aggiungere token JWT (se usi autenticazione)
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem("token");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
   }
-};
+  return config;
+});
+
+export default api; // 👈 adesso puoi fare import api from "./api.js"

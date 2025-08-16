@@ -9,7 +9,7 @@ export const fetchDeezer = async (query) => {
   const res = await api.get(`/api/deezer/search`, {
     params: { q: query },
   });
-  return res.data;
+  return res.data.data;
 };
 
 /**
