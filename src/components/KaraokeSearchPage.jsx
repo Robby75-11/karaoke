@@ -29,7 +29,7 @@ const KaraokeSearchPage = () => {
 
     try {
       const data = await fetchDeezer(query);
-      setResults(data.data);
+      setResults(data);
       console.log("Risultati API Deezer per Karaoke:", data);
     } catch (error) {
       console.error("Errore di ricerca:", error);
