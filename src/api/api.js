@@ -1,15 +1,16 @@
 import axios from "axios";
 
-const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || "http://localhost:8080",
-});
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-api.interceptors.request.use((config) => {
-  const token = localStorage.getItem("token"); // o come lo chiami nel tuo storage
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+// 🔍 Ricerca brani tramite il tuo backend
+export const searchTracks = async (query) => {
+  try {
+    const res = await axios.get(`${API_BASE_URL}/api/deezer/search`, {
+      params: { q: query },
+    });
+    return res.data;
+  } catch (err) {
+    console.error("Errore ricerca Deezer:", err);
+    throw err;
   }
-  return config;
-});
-
-export default api;
+};
